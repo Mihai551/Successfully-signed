@@ -30,8 +30,8 @@ public class UserServiceImpl implements UserService {
 	private UserDao userDao;
 
 	@Autowired
-	private RoleDao roleDao; 
-	
+	private RoleDao roleDao;
+
 	@Autowired
 	@Setter
 	@Getter
@@ -48,17 +48,20 @@ public class UserServiceImpl implements UserService {
 	@Transactional
 	public void save(CrmUser crmUser) {
 		User user = new User();
-		 // assign user details to the user object
+		// assign user details to the user object
 		user.setUserName(crmUser.getUserName());
 		user.setPassword(passwordEncoder.encode(crmUser.getPassword()));
 		user.setFirstName(crmUser.getFirstName());
 		user.setLastName(crmUser.getLastName());
 		user.setEmail(crmUser.getEmail());
 
-		 //give user default role of "employee"
-		user.setRoles(Arrays.asList(roleDao.findRoleByName("natural_person")));
+		if (crmUser.getCompany() == null) {
+			user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_NATURAL_PERSON")));
+		} else {
+			user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_JURIDICAL_ENTITY")));
+		}
 
-		 // save user in the database
+		// save user in the database
 		userDao.save(user);
 	}
 

@@ -74,12 +74,7 @@ public class RegistrationController {
         }
         
         // create user account
-        /***
-        if (theCrmUser.getCompany() == null) {
-        	theCrmUser.setRoleName("natural person") }
-        else { theCrmUser.setRoleName("juridical entity")
-        }
-        ***/
+        
         userService.save(theCrmUser);
         
         logger.info("Successfully created user: " + userName);

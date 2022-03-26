@@ -14,9 +14,6 @@ import lombok.Setter;
 })
 public class CrmUser {
 	
-	@Setter
-	@Getter
-	private String company;
 
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
@@ -54,6 +51,11 @@ public class CrmUser {
 	@Setter
 	@Getter
 	private String email;
+	
+	@Setter
+	@Getter
+	private String company;
+
 
 	public CrmUser() {
 

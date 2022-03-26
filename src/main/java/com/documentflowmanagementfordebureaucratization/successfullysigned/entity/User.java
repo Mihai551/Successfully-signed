@@ -60,21 +60,23 @@ public class User {
 	public User() {
 	}
 
-	public User(String userName, String password, String firstName, String lastName, String email) {
+	public User(String userName, String password, String firstName, String lastName, String email, String company) {
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.company = company;
 	}
 
-	public User(String userName, String password, String firstName, String lastName, String email,
+	public User(String userName, String password, String firstName, String lastName, String email, String company,
 			Collection<Role> roles) {
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
+		this.company = company;
 		this.roles = roles;
 	}
 
