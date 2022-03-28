@@ -1,7 +1,8 @@
 package com.documentflowmanagementfordebureaucratization.successfullysigned.service;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.User;
-import com.documentflowmanagementfordebureaucratization.successfullysigned.user.CrmUser;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmUser;
+
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 public interface UserService extends UserDetailsService {

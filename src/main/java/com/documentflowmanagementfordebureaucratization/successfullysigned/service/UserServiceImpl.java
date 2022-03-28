@@ -4,7 +4,7 @@ import com.documentflowmanagementfordebureaucratization.successfullysigned.dao.R
 import com.documentflowmanagementfordebureaucratization.successfullysigned.dao.UserDao;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.Role;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.User;
-import com.documentflowmanagementfordebureaucratization.successfullysigned.user.CrmUser;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmUser;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(crmUser.getFirstName());
 		user.setLastName(crmUser.getLastName());
 		user.setEmail(crmUser.getEmail());
+		user.setCompany(crmUser.getCompany());
 
 		if (crmUser.getCompany() == null) {
 			user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_NATURAL_PERSON")));

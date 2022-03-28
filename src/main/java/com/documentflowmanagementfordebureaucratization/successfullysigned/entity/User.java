@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
@@ -48,6 +49,11 @@ public class User {
 	@Setter
 	@Getter
 	private String company;
+	
+	@OneToMany(mappedBy="user",
+			   cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+						 CascadeType.DETACH, CascadeType.REFRESH})
+	private List<Service> services;
 	
 	@Setter
 	@Getter

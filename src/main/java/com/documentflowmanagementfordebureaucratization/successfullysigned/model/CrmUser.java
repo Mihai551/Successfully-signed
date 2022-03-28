@@ -1,4 +1,4 @@
-package com.documentflowmanagementfordebureaucratization.successfullysigned.user;
+package com.documentflowmanagementfordebureaucratization.successfullysigned.model;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;

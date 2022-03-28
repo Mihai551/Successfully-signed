@@ -16,12 +16,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.documentflowmanagementfordebureaucratization.successfullysigned.user.CrmUser;
-
 import lombok.Getter;
 import lombok.Setter;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.User;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmUser;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.UserService;
 
 @Controller
