@@ -2,7 +2,6 @@ package com.documentflowmanagementfordebureaucratization.successfullysigned.enti
 
 import javax.persistence.*;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -44,24 +43,25 @@ public class User {
 	@Setter
 	@Getter
 	private String email;
-	
+
 	@Column(name = "company")
 	@Setter
 	@Getter
 	private String company;
-	
-	@OneToMany(mappedBy="user",
-			   cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-						 CascadeType.DETACH, CascadeType.REFRESH})
-	private List<Service> services;
-	
+
+
+	@Setter
+	@Getter
+	@OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+			CascadeType.REFRESH, CascadeType.ALL })
+	private Collection<Service> services;
+
 	@Setter
 	@Getter
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "users_roles", 
-	joinColumns = @JoinColumn(name = "user_id"), 
-	inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<Role> roles;
+
 
 	public User() {
 	}
@@ -76,7 +76,7 @@ public class User {
 	}
 
 	public User(String userName, String password, String firstName, String lastName, String email, String company,
-			Collection<Role> roles) {
+			Collection<Role> roles, Collection<Service> services) {
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
@@ -84,8 +84,8 @@ public class User {
 		this.email = email;
 		this.company = company;
 		this.roles = roles;
+		this.services = services;
 	}
-
 
 	@Override
 	public String toString() {

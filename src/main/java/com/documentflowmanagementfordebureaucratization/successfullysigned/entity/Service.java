@@ -21,22 +21,20 @@ public class Service {
 	@Getter
 	private String name;
 
-	@Column(name = "company")
-	@Setter
-	@Getter
-	private String company;
-
 	@Setter
 	@Getter
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "user_id")
 	private User user;
 
-	public Service(String name, String company, User user) {
-		super();
+	public Service() {
+	}
+
+	public Service(String name, User user) {
+
 		this.name = name;
-		this.company = company;
 		this.user = user;
+		
 	}
 
 }
