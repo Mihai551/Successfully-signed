@@ -52,7 +52,7 @@ public class User {
 
 	@Setter
 	@Getter
-	@OneToMany(mappedBy = "user", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
 			CascadeType.REFRESH, CascadeType.ALL })
 	private Collection<Service> services;
 

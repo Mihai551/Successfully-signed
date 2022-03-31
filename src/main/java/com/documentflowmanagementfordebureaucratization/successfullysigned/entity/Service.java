@@ -1,5 +1,7 @@
 package com.documentflowmanagementfordebureaucratization.successfullysigned.entity;
 
+import java.util.Collection;
+
 import javax.persistence.*;
 
 import lombok.Getter;
@@ -26,6 +28,12 @@ public class Service {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "user_id")
 	private User user;
+	
+	@Setter
+	@Getter
+	@OneToMany(mappedBy = "service", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+			CascadeType.REFRESH, CascadeType.ALL })
+	private Collection<Step> steps;
 
 	public Service() {
 	}
@@ -35,6 +43,13 @@ public class Service {
 		this.name = name;
 		this.user = user;
 		
+	}
+	
+	public Service(String name, User user, Collection<Step> steps) {
+
+		this.name = name;
+		this.user = user;
+		this.steps = steps;		
 	}
 
 }
