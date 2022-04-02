@@ -18,5 +18,10 @@ public class CrmService {
 	
 	@Setter
 	@Getter
-	private String userName;
+	private CrmService theService;
+	
+	@Setter
+	@Getter
+	private Long id;
+	
 }

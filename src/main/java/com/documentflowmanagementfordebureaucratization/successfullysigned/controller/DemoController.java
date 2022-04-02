@@ -20,7 +20,10 @@ import java.util.logging.Logger;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.*;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmService;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmStep;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmUser;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.service.ServiceService;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.service.ServiceServiceImpl;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.UserService;
 import java.util.*;
 
@@ -29,6 +32,8 @@ public class DemoController {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private ServiceService serviceService;
 
 	@GetMapping("/")
 	public String showHome() {
@@ -87,13 +92,57 @@ public class DemoController {
 		return "my-services";
 	}
 
-	@GetMapping("/steps")
-	public String getSteps(HttpSession session) {
+	@PostMapping("/add-step")
+	public String addStep(@Valid @ModelAttribute("crmService") CrmService theCrmService, BindingResult theBindingResult,
+			Model theModel, HttpSession session) {
 
+		/*
+		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		 * User updatedUser = userService.findByUserName(auth.getName());
+		 * session.setAttribute("user", updatedUser);
+		 */
+		
+		CrmStep theCrmStep = new CrmStep();
+
+		Service service = serviceService.findServiceById(theCrmService.getId());
+		theCrmService.setName(service.getName());
+		theModel.addAttribute("crmService", theCrmService);
+		theModel.addAttribute("crmStep", new CrmStep());
+
+		return "add-step";
+	}
+
+	@PostMapping("/process-add-step")
+	public String String (@Valid @ModelAttribute("crmStep") CrmStep theCrmStep, BindingResult theBindingResult,
+			Model theModel, HttpSession session) {
+		System.out.print("@DEBUG SERVICE ID DIN FRONTEND :  "+theCrmStep.getDocumentName() + "  " + theCrmStep.getAction());
+		System.out.print("@DEBUG SERVICE ID DIN FRONTEND :  "+theCrmStep.getServiceId());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		User updatedUser = userService.findByUserName(auth.getName());
-		session.setAttribute("user", updatedUser);
+		User user = userService.findByUserName(auth.getName());
+		
+		Service service = serviceService.findServiceById(theCrmStep.getServiceId());
+		
+		
+		Step step = new Step(theCrmStep.getAction(), theCrmStep.getDocumentName());
+		step.setService(service);
+		Collection<Step> newStep = new ArrayList<Step>();
+		newStep.add(step);
+		
+		service.setSteps(newStep);
+		service.setUser(user);
+		Collection<Service> newService = new ArrayList<Service>();
+		newService.add(service);
 
-		return "steps";
+		
+		//user.setServices(newService);
+		
+		userService.saveService(user, newService);
+		CrmService theCrmService = new CrmService();
+		theCrmService.setId(theCrmStep.getServiceId());
+		theModel.addAttribute("crmService", theCrmService);
+		
+		return "forward:/add-step";
+		
 	}
 }

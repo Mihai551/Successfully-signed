@@ -14,6 +14,10 @@ public class CrmStep {
 	@Getter
 	private String action;
 	
+	@Setter
+	@Getter
+	private Long serviceId;
+	
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
 	@Setter

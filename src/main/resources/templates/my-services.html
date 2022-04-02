@@ -53,13 +53,13 @@
 			<div class="panel panel-primary">
 
 				<div class="panel-heading">
-					<div class="panel-title">Define new service</div>
+					<div class="panel-title">Select a service</div>
 				</div>
 
 				<div style="padding-top: 30px" class="panel-body">
 
 					<!-- New Service Form -->
-					<form th:action="@{/new-service-process}" th:object="${crmService}"
+					<form th:action="@{/add-step}" th:object="${crmService}"
 						method="POST" class="form-horizontal">
 
 						<!-- Place for messages: error, alert etc ... -->
@@ -84,7 +84,7 @@
 							
 								
 								<div th:each="service: ${session.user.services}">
-									<input type="radio" name="name" th:value="${service.id}"  th:text="${service.name}" class="custom-control-input">
+									<input type="radio" name="id" th:value="${service.id}"  th:text="${service.name}" class="custom-control-input">
 									
 									</div>
 									
@@ -98,7 +98,7 @@
 						<!-- Save the new service -->
 						<div style="margin-top: 10px" class="form-group">
 							<div class="col-sm-6 controls">
-								<button type="submit" class="btn btn-primary">Submit</button>
+								<button type="submit" class="btn btn-primary">Steps</button>
 							</div>
 						</div>
 
