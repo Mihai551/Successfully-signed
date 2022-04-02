@@ -61,31 +61,39 @@ public class DemoController {
 	@PostMapping("/new-service-process")
 	public String defineServiceProcess(@Valid @ModelAttribute("crmService") CrmService theCrmService,
 			BindingResult theBindingResult, Model theModel) {
-		
-		System.out.println("DEBUG@  "  + theCrmService.getUserName() + "   DEBUG@  " + theCrmService.getName());
-		
-		User user = userService.findByUserName(theCrmService.getUserName());
-		
-		Service service =  new Service();
+
+		User user = userService.findByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
+
+		Service service = new Service();
 		service.setName(theCrmService.getName());
 		service.setUser(user);
-		
+
 		Collection<Service> newService = new ArrayList<Service>();
 		newService.add(service);
-		
-		user = userService.findByUserName(theCrmService.getUserName());
-		
-		
-		
+
+		userService.saveService(user, newService);
 
 		return "home";
 	}
 
 	@GetMapping("/my-services")
 	public String getMyServices(HttpSession session) {
-		
-		//session.setAttribute("user", user);
-		
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User updatedUser = userService.findByUserName(auth.getName());
+		System.out.print("puuulalalalalala: " + updatedUser.getServices().size());
+		session.setAttribute("user", updatedUser);
+
 		return "my-services";
+	}
+
+	@GetMapping("/steps")
+	public String getSteps(HttpSession session) {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User updatedUser = userService.findByUserName(auth.getName());
+		session.setAttribute("user", updatedUser);
+
+		return "steps";
 	}
 }
