@@ -43,7 +43,11 @@ public class Step {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "service_id")
 	private Service service;
-
+	
+	public Step() {
+		
+	}
+	
 	public Step(String action, String documentName) {
 		super();
 		this.action = action;

@@ -1,18 +1,23 @@
 package com.documentflowmanagementfordebureaucratization.successfullysigned.controller;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -64,7 +69,7 @@ public class DemoController {
 	}
 
 	@PostMapping("/new-service-process")
-	public String defineServiceProcess(@Valid @ModelAttribute("crmService") CrmService theCrmService,
+	public ModelAndView defineServiceProcess(@Valid @ModelAttribute("crmService") CrmService theCrmService,
 			BindingResult theBindingResult, Model theModel) {
 
 		User user = userService.findByUserName(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -78,7 +83,8 @@ public class DemoController {
 
 		userService.saveService(user, newService);
 
-		return "home";
+		return new ModelAndView("redirect:/my-services");
+
 	}
 
 	@GetMapping("/my-services")
@@ -86,63 +92,74 @@ public class DemoController {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User updatedUser = userService.findByUserName(auth.getName());
-		System.out.print("puuulalalalalala: " + updatedUser.getServices().size());
+		System.out.print("DEBUG /my-services:  " + updatedUser.getServices());
 		session.setAttribute("user", updatedUser);
 
 		return "my-services";
 	}
 
 	@PostMapping("/add-step")
-	public String addStep(@Valid @ModelAttribute("crmService") CrmService theCrmService, BindingResult theBindingResult,
-			Model theModel, HttpSession session) {
+	public String addStep(@ModelAttribute("crmService") CrmService theCrmService,
+			@ModelAttribute("serviceId") String theServiceId, BindingResult theBindingResult, Model theModel,
+			HttpSession session) {
 
 		/*
 		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		 * User updatedUser = userService.findByUserName(auth.getName());
 		 * session.setAttribute("user", updatedUser);
 		 */
-		
-		CrmStep theCrmStep = new CrmStep();
+
+		if (theServiceId == null || theServiceId.isEmpty()) {
+		} else {
+			theCrmService.setId(Long.parseLong(theServiceId));
+		}
 
 		Service service = serviceService.findServiceById(theCrmService.getId());
+		
+
 		theCrmService.setName(service.getName());
 		theModel.addAttribute("crmService", theCrmService);
 		theModel.addAttribute("crmStep", new CrmStep());
+		theModel.addAttribute("theSteps", service.getSteps());
 
 		return "add-step";
 	}
 
 	@PostMapping("/process-add-step")
-	public String String (@Valid @ModelAttribute("crmStep") CrmStep theCrmStep, BindingResult theBindingResult,
-			Model theModel, HttpSession session) {
-		System.out.print("@DEBUG SERVICE ID DIN FRONTEND :  "+theCrmStep.getDocumentName() + "  " + theCrmStep.getAction());
-		System.out.print("@DEBUG SERVICE ID DIN FRONTEND :  "+theCrmStep.getServiceId());
-		
+	public ModelAndView processAddStep(@Valid @ModelAttribute("crmStep") CrmStep theCrmStep,
+			BindingResult theBindingResult, Model theModel, HttpSession session, HttpServletRequest request,
+			ModelMap model) {
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUserName(auth.getName());
-		
+
 		Service service = serviceService.findServiceById(theCrmStep.getServiceId());
-		
-		
+
 		Step step = new Step(theCrmStep.getAction(), theCrmStep.getDocumentName());
 		step.setService(service);
 		Collection<Step> newStep = new ArrayList<Step>();
 		newStep.add(step);
-		
+
 		service.setSteps(newStep);
 		service.setUser(user);
 		Collection<Service> newService = new ArrayList<Service>();
 		newService.add(service);
 
-		
-		//user.setServices(newService);
-		
+		// user.setServices(newService);
+
 		userService.saveService(user, newService);
+
+		User updatedUser = userService.findByUserName(auth.getName());
+		session.setAttribute("user", updatedUser);
+
 		CrmService theCrmService = new CrmService();
 		theCrmService.setId(theCrmStep.getServiceId());
-		theModel.addAttribute("crmService", theCrmService);
-		
-		return "forward:/add-step";
-		
+
+		model.addAttribute("serviceId", theCrmService.getId().toString());
+
+		request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+
+		return new ModelAndView("redirect:/add-step", model);
+
 	}
 }

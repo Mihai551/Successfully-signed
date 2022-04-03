@@ -40,6 +40,8 @@
 		<div th:if="${session.user}">
 			<p th:text="${crmService.name}"></p>
 		</div>
+
+
 	</div>
 
 
@@ -57,7 +59,7 @@
 
 				<div style="padding-top: 30px" class="panel-body">
 
-					<!-- New Service Form -->
+					<!-- Add Step -->
 					<form th:action="@{/process-add-step}" th:object="${crmStep}"
 						method="POST" class="form-horizontal">
 
@@ -81,12 +83,11 @@
 							<span class="input-group-addon"><i
 								class="glyphicon glyphicon-user"></i></span> <input type="text"
 								th:field="*{documentName}" placeholder="document name (*)"
-								class="form-control" /> <input type="hidden"
-								name = "serviceId" th:value="${crmService.id}" />
-
-							<input type="radio" name="action" th:value="upload"
-								th:text="upload" class="custom-control-input"> <input
-								type="radio" name="action" th:value="sing" th:text="sign"
+								class="form-control" /> <input type="hidden" name="serviceId"
+								th:value="${crmService.id}" /> <input type="radio"
+								name="action" th:value="upload" th:text="upload"
+								class="custom-control-input"> <input type="radio"
+								name="action" th:value="sign" th:text="sign"
 								class="custom-control-input">
 						</div>
 
@@ -102,13 +103,37 @@
 
 					</form>
 
+
+
+
+
+
 				</div>
 
 			</div>
 
 		</div>
+		<br>
+		<table>
+			<thead>
+				<tr>
+					<th>Steps</th>
+
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr th:each="step: ${theSteps}">
+					<td th:text="${step.action} + ' -> '" />
+					<td th:text="${step.documentName}" />
+
+				</tr>
+			</tbody>
+		</table>
 
 	</div>
+
+
 
 </body>
 </html>
