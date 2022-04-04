@@ -27,12 +27,12 @@ public class Step {
 	@Setter
 	@Getter
 	private String action;
-	
+
 	@Column(name = "document_name")
 	@Setter
 	@Getter
 	private String documentName;
-	
+
 	@Column(name = "no")
 	@Setter
 	@Getter
@@ -43,16 +43,15 @@ public class Step {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "service_id")
 	private Service service;
-	
+
 	public Step() {
-		
+
 	}
-	
+
 	public Step(String action, String documentName) {
 		super();
 		this.action = action;
 		this.documentName = documentName;
 	}
-	
-	
+
 }

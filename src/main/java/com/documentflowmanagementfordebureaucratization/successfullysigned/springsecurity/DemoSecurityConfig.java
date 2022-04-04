@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.documentflowmanagementfordebureaucratization.successfullysigned. service.UserService;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.service.UserService;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,58 +20,42 @@ import lombok.Setter;
 public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	// add a reference to our user service
-    @Autowired
-    private UserService userService;
-	
-    @Autowired
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-    
-   @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
-	
+	@Autowired
+	private UserService userService;
+
+	@Autowired
+	private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(authenticationProvider());
+	}
+
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests()
-		.antMatchers("/").authenticated()
-		.antMatchers("/leaders/**").hasRole("NATURAL_PERSON")
-		.antMatchers("/systems/**").hasRole("JURIDICAL_ENTITY")
-		.antMatchers("/my-services/**").hasRole("JURIDICAL_ENTITY")
-		.and()
-		.formLogin()
-			.loginPage("/showMyLoginPage")
-			.loginProcessingUrl("/authenticateTheUser")
-			.successHandler(customAuthenticationSuccessHandler)
-			.permitAll()
-		.and()
-		.logout().permitAll()
-		.and()
-		.exceptionHandling().accessDeniedPage("/access-denied");
-		
+		http.authorizeRequests().antMatchers("/").authenticated().antMatchers("/leaders/**").hasRole("NATURAL_PERSON")
+				.antMatchers("/systems/**").hasRole("JURIDICAL_ENTITY").antMatchers("/my-services/**")
+				.hasRole("JURIDICAL_ENTITY").and().formLogin().loginPage("/showMyLoginPage")
+				.loginProcessingUrl("/authenticateTheUser").successHandler(customAuthenticationSuccessHandler)
+				.permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/access-denied");
+
 	}
-	
-	//beans
-	//bcrypt bean definition
+
+	// beans
+	// bcrypt bean definition
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
 
-	//authenticationProvider bean definition
+	// authenticationProvider bean definition
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-		auth.setUserDetailsService(userService); //set the custom user details service
-		auth.setPasswordEncoder(passwordEncoder()); //set the password encoder - bcrypt
+		auth.setUserDetailsService(userService); // set the custom user details service
+		auth.setPasswordEncoder(passwordEncoder()); // set the password encoder - bcrypt
 		return auth;
 	}
-	  
+
 }
-
-
-
-
-
-

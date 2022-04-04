@@ -20,7 +20,7 @@ public class ServiceServiceImpl implements ServiceService {
 	@Override
 	@Transactional
 	public Service findServiceById(Long id) {
-		System.out.print("ServiceService.findbyID:  "+ serviceDao.findServicebyId(id).getId() );
+		System.out.print("ServiceService.findbyID:  " + serviceDao.findServicebyId(id).getId());
 		return serviceDao.findServicebyId(id);
 	}
 

@@ -7,17 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 public class CrmStep {
-	
+
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
 	@Setter
 	@Getter
 	private String action;
-	
+
 	@Setter
 	@Getter
 	private Long serviceId;
-	
+
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
 	@Setter

@@ -28,7 +28,7 @@ public class Service {
 	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "user_id")
 	private User user;
-	
+
 	@Setter
 	@Getter
 	@OneToMany(mappedBy = "service", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
@@ -42,14 +42,14 @@ public class Service {
 
 		this.name = name;
 		this.user = user;
-		
+
 	}
-	
+
 	public Service(String name, User user, Collection<Step> steps) {
 
 		this.name = name;
 		this.user = user;
-		this.steps = steps;		
+		this.steps = steps;
 	}
 
 }

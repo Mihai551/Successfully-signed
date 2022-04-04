@@ -27,7 +27,6 @@ public class ServiceDaoImpl implements ServiceDao {
 		Service theService = null;
 		try {
 			theService = theQuery.getSingleResult();
-			System.out.println("ServiceDAO, find by id  :   " + theService.getId());
 		} catch (Exception e) {
 			theService = null;
 		}

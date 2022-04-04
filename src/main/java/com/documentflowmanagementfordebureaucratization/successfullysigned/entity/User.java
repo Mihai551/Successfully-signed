@@ -49,11 +49,10 @@ public class User {
 	@Getter
 	private String company;
 
-
 	@Setter
 	@Getter
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
-			CascadeType.REFRESH, CascadeType.ALL })
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH, CascadeType.REFRESH, CascadeType.ALL })
 	private Collection<Service> services;
 
 	@Setter
@@ -61,7 +60,6 @@ public class User {
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Collection<Role> roles;
-
 
 	public User() {
 	}

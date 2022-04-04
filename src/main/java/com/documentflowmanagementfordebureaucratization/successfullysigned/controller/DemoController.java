@@ -92,7 +92,6 @@ public class DemoController {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User updatedUser = userService.findByUserName(auth.getName());
-		System.out.print("DEBUG /my-services:  " + updatedUser.getServices());
 		session.setAttribute("user", updatedUser);
 
 		return "my-services";

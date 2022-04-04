@@ -17,17 +17,19 @@ import com.documentflowmanagementfordebureaucratization.successfullysigned.valid
 @Documented
 public @interface FieldMatch {
 	String message() default "";
+
 	Class<?>[] groups() default {};
+
 	Class<? extends Payload>[] payload() default {};
-	
+
 	String first();
-    String second();
-    
-    @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
-    @Retention(RetentionPolicy.RUNTIME)
-    @Documented
-    @interface List
-    {
-    	FieldMatch[] value();
-    }
+
+	String second();
+
+	@Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
+	@Retention(RetentionPolicy.RUNTIME)
+	@Documented
+	@interface List {
+		FieldMatch[] value();
+	}
 }

@@ -13,8 +13,6 @@ public interface UserService extends UserDetailsService {
 	public User findByUserName(String userName);
 
 	public void save(CrmUser crmUser);
-	
-	
 
 	void saveService(User user, Collection<Service> service);
 }
