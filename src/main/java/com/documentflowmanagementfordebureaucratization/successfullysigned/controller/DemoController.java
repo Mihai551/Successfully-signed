@@ -46,22 +46,6 @@ public class DemoController {
 		return "home";
 	}
 
-	// add request mapping for /leaders
-
-	@GetMapping("/leaders")
-	public String showLeaders() {
-
-		return "leaders";
-	}
-
-	// add request mapping for /systems
-
-	@GetMapping("/systems")
-	public String showSystems() {
-
-		return "systems";
-	}
-
 	@GetMapping("/new-service")
 	public String defineService(Model theModel) {
 		theModel.addAttribute("crmService", new CrmService());
@@ -114,7 +98,6 @@ public class DemoController {
 		}
 
 		Service service = serviceService.findServiceById(theCrmService.getId());
-		
 
 		theCrmService.setName(service.getName());
 		theModel.addAttribute("crmService", theCrmService);
@@ -135,7 +118,7 @@ public class DemoController {
 		Service service = serviceService.findServiceById(theCrmStep.getServiceId());
 
 		Step step = new Step(theCrmStep.getAction(), theCrmStep.getDocumentName());
-		step.setNo( service.getSteps().size() + 1 );
+		step.setNo(service.getSteps().size() + 1);
 		step.setService(service);
 		Collection<Step> newStep = new ArrayList<Step>();
 		newStep.add(step);
