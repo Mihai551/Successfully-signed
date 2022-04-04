@@ -79,16 +79,16 @@
 
 						<!-- Service name -->
 						<div style="margin-bottom: 25px" class="input-group">
-							<span class="input-group-addon"><i
-								class=""></i></span>
-							
-								
-								<div th:each="service: ${session.user.services}">
-									<input type="radio" name="id" th:value="${service.id}"  th:text="${service.name}" class="custom-control-input">
-									
-									</div>
-									
-								
+							<span class="input-group-addon"><i class=""></i></span>
+
+
+							<div th:each="service: ${session.user.services}">
+								<input type="radio" name="id" th:value="${service.id}"
+									th:text="${service.name}" class="custom-control-input">
+
+							</div>
+
+
 
 						</div>
 
@@ -112,9 +112,9 @@
 
 	</div>
 
-<hr>
+	<hr>
 
-<a th:href="@{/}">Back to Home Page</a>
+	<a th:href="@{/}">Back to Home Page</a>
 
 </body>
 </html>

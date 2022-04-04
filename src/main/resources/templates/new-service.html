@@ -86,7 +86,8 @@
 
 						<div th:if="${session.user}">
 							<div>
-							 <input type="hidden" th:value="${session.user.userName}" name="userName" />
+								<input type="hidden" th:value="${session.user.userName}"
+									name="userName" />
 							</div>
 						</div>
 
@@ -117,9 +118,9 @@
 
 	</div>
 
-<hr>
+	<hr>
 
-<a th:href="@{/}">Back to Home Page</a>
+	<a th:href="@{/}">Back to Home Page</a>
 
 </body>
 </html>
