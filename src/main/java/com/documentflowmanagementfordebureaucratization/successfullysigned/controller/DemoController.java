@@ -136,6 +136,7 @@ public class DemoController {
 		Service service = serviceService.findServiceById(theCrmStep.getServiceId());
 
 		Step step = new Step(theCrmStep.getAction(), theCrmStep.getDocumentName());
+		step.setNo( service.getSteps().size() + 1 );
 		step.setService(service);
 		Collection<Step> newStep = new ArrayList<Step>();
 		newStep.add(step);

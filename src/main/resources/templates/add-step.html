@@ -124,6 +124,7 @@
 			<tbody>
 
 				<tr th:each="step: ${theSteps}">
+					<td th:text="${step.no} + '. '" />
 					<td th:text="${step.action} + ' -> '" />
 					<td th:text="${step.documentName}" />
 
@@ -133,7 +134,9 @@
 
 	</div>
 
+<hr>
 
+<a th:href="@{/}">Back to Home Page</a>
 
 </body>
 </html>

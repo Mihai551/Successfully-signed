@@ -36,7 +36,7 @@ public class Step {
 	@Column(name = "no")
 	@Setter
 	@Getter
-	private String no;
+	private int no;
 
 	@Setter
 	@Getter
