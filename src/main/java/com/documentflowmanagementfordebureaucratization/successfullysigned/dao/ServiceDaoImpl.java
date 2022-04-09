@@ -1,5 +1,8 @@
 package com.documentflowmanagementfordebureaucratization.successfullysigned.dao;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.persistence.EntityManager;
 
 import org.hibernate.Session;
@@ -32,5 +35,23 @@ public class ServiceDaoImpl implements ServiceDao {
 		}
 
 		return theService;
+	}
+
+	@Override
+	public Collection<Service> getServices() {
+		// TODO Auto-generated method stub
+		
+		Session currentSession = entityManager.unwrap(Session.class);
+		
+		Query<Service> theQuery = currentSession.createQuery("from Service", Service.class);
+		
+		Collection<Service> services = new ArrayList<Service>();
+		try {
+			services = theQuery.getResultList();
+		} catch (Exception e) {
+			
+		}
+		
+		return services;
 	}
 }

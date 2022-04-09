@@ -16,11 +16,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.logging.Logger;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.*;
@@ -98,7 +100,6 @@ public class DemoController {
 		}
 
 		Service service = serviceService.findServiceById(theCrmService.getId());
-
 		theCrmService.setName(service.getName());
 		theModel.addAttribute("crmService", theCrmService);
 		theModel.addAttribute("crmStep", new CrmStep());
@@ -145,4 +146,40 @@ public class DemoController {
 		return new ModelAndView("redirect:/add-step", model);
 
 	}
+
+	@GetMapping("/new-folder")
+	public String newFolder(Model theModel) {
+		List<Service> services = (List<Service>) serviceService.getServices();
+		theModel.addAttribute("services", services);
+		return "new-folder";
+
+	}
+
+	@RequestMapping(value = "process-new-folder", method = RequestMethod.GET)
+	public String getItem(@RequestParam("id") Long serviceId) {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.findByUserName(auth.getName());
+
+		System.out.print("service id pentru folder:  " + serviceId + "  a mers dq  ");
+
+		Folder folder = new Folder(1, user, serviceService.findServiceById(serviceId));
+
+		user.setFolders(new ArrayList<Folder>(Arrays.asList(folder)));
+		userService.saveUser(user);
+
+		return "home";
+
+	}
+
+	@GetMapping("/my-folders")
+	public String myFolders(Model theModel) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.findByUserName(auth.getName());
+
+		List<Folder> folders = (List<Folder>) user.getFolders();
+		theModel.addAttribute("folders", folders);
+		return "my-folders";
+	}
+
 }

@@ -30,10 +30,9 @@
 
 	<div sec:authorize="hasRole('ROLE_NATURAL_PERSON')">
 
-		<!-- Add a link to point to /leaders ... this is for the managers -->
 
 		<p>
-			<a th:href="@{/new-folder}">New folder</a> (Only for Manager peeps)
+			<a th:href="@{/new-folder}">New folder</a> (Only for natural people)
 
 		</p>
 

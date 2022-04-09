@@ -87,6 +87,12 @@ public class UserServiceImpl implements UserService {
 			Collection<com.documentflowmanagementfordebureaucratization.successfullysigned.entity.Service> service) {
 		user.setServices(service);
 		userDao.save(user);
+	}
+
+	@Override
+	@Transactional
+	public void saveUser(User user) {
+		userDao.save(user);
 
 	}
 }

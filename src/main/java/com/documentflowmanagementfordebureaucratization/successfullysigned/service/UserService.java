@@ -15,4 +15,6 @@ public interface UserService extends UserDetailsService {
 	public void save(CrmUser crmUser);
 
 	void saveService(User user, Collection<Service> service);
+
+	void saveUser(User user);
 }

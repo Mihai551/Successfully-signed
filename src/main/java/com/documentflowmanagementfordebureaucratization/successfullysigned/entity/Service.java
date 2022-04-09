@@ -31,9 +31,14 @@ public class Service {
 
 	@Setter
 	@Getter
-	@OneToMany(mappedBy = "service", cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
+	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY,  cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH,
 			CascadeType.REFRESH, CascadeType.ALL })
 	private Collection<Step> steps;
+	
+	@Setter
+	@Getter
+	@OneToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
+	private Collection<Folder> folders;
 
 	public Service() {
 	}
