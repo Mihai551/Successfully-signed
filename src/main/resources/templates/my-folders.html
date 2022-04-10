@@ -58,7 +58,7 @@
 
 				<div style="padding-top: 30px" class="panel-body">
 
-					<!-- New Folder Form -->
+
 
 
 					<!-- Place for messages: error, alert etc ... -->
@@ -81,18 +81,14 @@
 						<span class="input-group-addon"><i class=""></i></span>
 
 
-						<th:block th:each="service: ${services}">
-							<a th:href="@{/process-new-folder/(id=${service.id})}">
-								 [[${service.user.company}]] -> [[${service.name}]]</a>
+						<th:block th:each="folder: ${folders}">
+							<a th:href="@{/process-new-folder/(id=${folder.id})}">
+								[[${folder.service.user.company}]] -> [[${folder.service.name}]]</a>
 							<br />
 						</th:block>
 
 					</div>
-
-
-
 				</div>
-
 
 
 			</div>

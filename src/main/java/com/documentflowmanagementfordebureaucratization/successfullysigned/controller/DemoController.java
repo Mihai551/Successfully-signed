@@ -156,7 +156,7 @@ public class DemoController {
 	}
 
 	@RequestMapping(value = "process-new-folder", method = RequestMethod.GET)
-	public String getItem(@RequestParam("id") Long serviceId) {
+	public String processNewFolder(@RequestParam("id") Long serviceId) {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUserName(auth.getName());
@@ -178,7 +178,13 @@ public class DemoController {
 		User user = userService.findByUserName(auth.getName());
 
 		List<Folder> folders = (List<Folder>) user.getFolders();
+		for (int i = 0; i < folders.size(); i++) {
+			Folder f = folders.get(i);
+			f.setService(serviceService.findServiceById(f.getServiceId()));
+			folders.set(i, f);
+		}
 		theModel.addAttribute("folders", folders);
+		
 		return "my-folders";
 	}
 

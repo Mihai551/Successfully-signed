@@ -22,12 +22,16 @@ public class Folder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@Setter
+	@Getter
 	private Long id;
 	
 	@Column(name = "step_no")
 	@Setter
 	@Getter
 	private int step_no;
+	
+	
 	
 	
 	@Setter
@@ -41,6 +45,11 @@ public class Folder {
 	@OneToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(name = "service_id")
 	private Service service;
+	
+	@Column(name = "service_id", insertable = false, updatable = false)
+	@Setter
+	@Getter
+	private long serviceId;
 
 	public Folder() {
 		
