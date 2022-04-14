@@ -7,7 +7,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,18 +18,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
-
-import java.util.logging.Logger;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.*;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmStep;
-import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmUser;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.service.FolderService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.ServiceService;
-import com.documentflowmanagementfordebureaucratization.successfullysigned.service.ServiceServiceImpl;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.UserService;
 import java.util.*;
 
@@ -39,8 +34,12 @@ public class DemoController {
 
 	@Autowired
 	private UserService userService;
+
 	@Autowired
 	private ServiceService serviceService;
+
+	@Autowired
+	private FolderService folderService;
 
 	@GetMapping("/")
 	public String showHome() {
@@ -161,8 +160,6 @@ public class DemoController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUserName(auth.getName());
 
-		System.out.print("service id pentru folder:  " + serviceId + "  a mers dq  ");
-
 		Folder folder = new Folder(1, user, serviceService.findServiceById(serviceId));
 
 		user.setFolders(new ArrayList<Folder>(Arrays.asList(folder)));
@@ -182,10 +179,34 @@ public class DemoController {
 			Folder f = folders.get(i);
 			f.setService(serviceService.findServiceById(f.getServiceId()));
 			folders.set(i, f);
+			System.out.println();
 		}
 		theModel.addAttribute("folders", folders);
-		
+
 		return "my-folders";
+	}
+
+	@RequestMapping(value = "my-folder", method = RequestMethod.GET)
+	public String myFolder(@RequestParam("id") Long folderId, Model theModel) {
+
+		Folder theFolder = folderService.findFolderById(folderId);
+		List<Step> thelistOfSteps = (List<Step>) theFolder.getService().getSteps();
+
+		Step theStep = new Step();
+		for (int i = 0; i < thelistOfSteps.size(); i++) {
+			theStep = (Step) thelistOfSteps.get(i);
+			if (theStep.getNo() == theFolder.getStep_no())
+				break;
+		}
+
+		theModel.addAttribute("step", theStep);
+		theModel.addAttribute("folder", theFolder);
+
+		if (theStep.getAction().equalsIgnoreCase("upload"))
+			return "upload";
+		else
+			return "sign";
+
 	}
 
 }

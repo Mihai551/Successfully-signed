@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.Service;
-import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.User;
 
 @Repository
 public class ServiceDaoImpl implements ServiceDao {

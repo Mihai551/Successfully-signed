@@ -82,7 +82,7 @@
 
 
 						<th:block th:each="folder: ${folders}">
-							<a th:href="@{/process-new-folder/(id=${folder.id})}">
+							<a th:href="@{/my-folder/(id=${folder.id})}">
 								[[${folder.service.user.company}]] -> [[${folder.service.name}]]</a>
 							<br />
 						</th:block>
@@ -102,6 +102,15 @@
 	<hr>
 
 	<a th:href="@{/}">Back to Home Page</a>
+
+	<br>
+	<br>
+
+	<form th:action="@{/logout}" method="POST">
+
+		<input type="submit" value="Logout" />
+
+	</form>
 
 </body>
 </html>
