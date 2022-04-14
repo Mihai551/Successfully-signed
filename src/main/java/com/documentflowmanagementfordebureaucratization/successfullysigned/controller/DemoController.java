@@ -4,8 +4,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import org.apache.tomcat.util.file.ConfigurationSource.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,9 +29,16 @@ import org.springframework.web.servlet.View;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.*;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmStep;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.service.DocumentService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.FolderService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.ServiceService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.UserService;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
@@ -40,6 +52,9 @@ public class DemoController {
 
 	@Autowired
 	private FolderService folderService;
+	
+	@Autowired
+	private DocumentService documentService;
 
 	@GetMapping("/")
 	public String showHome() {
@@ -207,6 +222,30 @@ public class DemoController {
 		else
 			return "sign";
 
+	}
+	
+	@RequestMapping(path = "/download", method = RequestMethod.GET)
+	public ResponseEntity<ByteArrayResource> download(@RequestParam("id") long id) throws IOException {
+
+	    // ...
+		
+		
+		
+	    Path path = Paths.get("C:/Users/Mihai/Desktop/Successfully-Signed-Documents/" + id +".pdf");
+	    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+	    File file = new File("C:/Users/Mihai/Desktop/Successfully-Signed-Documents/" + id +".pdf");
+	    
+	    HttpHeaders header = new HttpHeaders();
+        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ce.pdf");
+        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        header.add("Pragma", "no-cache");
+        header.add("Expires", "0");
+
+	    return ResponseEntity.ok()
+	            .headers(header)
+	            .contentLength(file.length())
+	            .contentType(MediaType.APPLICATION_OCTET_STREAM)
+	            .body(resource);
 	}
 
 }

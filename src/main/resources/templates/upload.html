@@ -31,10 +31,24 @@
 						</div>
 						<button type="submit" class="btn btn-primary">Upload File</button>
 					</form>
+					
+							<div style="margin-bottom: 25px" class="input-group">
+						<span class="input-group-addon"><i class=""></i></span>
+
+
+						<th:block th:each="document: ${folder.documents}">
+							<a th:href="@{/download/(id=${document.id})}">
+								[[${document.name}]]</a>
+							<br />
+						</th:block>
+
+					</div>
 				</div>
 			</div>
 		</div>
 	</section>
+	
+
 
 	<form th:action="@{/logout}" method="POST">
 
