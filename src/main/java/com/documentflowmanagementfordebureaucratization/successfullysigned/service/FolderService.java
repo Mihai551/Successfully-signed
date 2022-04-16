@@ -5,5 +5,7 @@ import com.documentflowmanagementfordebureaucratization.successfullysigned.entit
 public interface FolderService {
 	
 	public Folder findFolderById(Long id);
+	
+	void save(Folder theFolder);
 
 }

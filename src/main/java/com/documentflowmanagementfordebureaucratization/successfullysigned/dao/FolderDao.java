@@ -5,5 +5,7 @@ import com.documentflowmanagementfordebureaucratization.successfullysigned.entit
 public interface FolderDao {
 	
 	public Folder findFolderById(Long theId);
+	
+	void save(Folder theFolder);
 
 }

@@ -13,24 +13,10 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 mx-auto">
-					<h2>Upload File</h2>
-
-
-					<p th:text="${step.documentName}" />
+					<h2>No more steps!</h2>
 
 					<p th:text="${message}" th:if="${message ne null}"
 						class="alert alert-primary"></p>
-					<form method="post" th:action="@{/upload}"
-						enctype="multipart/form-data">
-						<div class="form-group">
-
-							<input type="file" name="file" class="form-control-file">
-							<input type="hidden" th:value="${folder.id}" name="folderId" />
-							<input type="hidden" th:value="${step.documentName}"
-								name="documentName" />
-						</div>
-						<button type="submit" class="btn btn-primary">Upload File</button>
-					</form>
 
 					<div style="margin-bottom: 25px" class="input-group">
 						<span class="input-group-addon"><i class=""></i></span>

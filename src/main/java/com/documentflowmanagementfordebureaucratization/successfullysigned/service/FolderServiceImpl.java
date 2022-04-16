@@ -21,4 +21,12 @@ public class FolderServiceImpl implements FolderService {
 		return folderDao.findFolderById(id);
 	}
 
+	@Override
+	@Transactional
+	public void save(Folder theFolder) {
+		// TODO Auto-generated method stub
+		folderDao.save(theFolder);
+		
+	}
+
 }

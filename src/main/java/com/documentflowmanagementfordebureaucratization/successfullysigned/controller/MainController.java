@@ -43,7 +43,7 @@ import java.util.*;
 import java.lang.Object;
 
 @Controller
-public class DemoController {
+public class MainController {
 
 	@Autowired
 	private UserService userService;
@@ -208,23 +208,42 @@ public class DemoController {
 	@RequestMapping(value = "my-folder", method = RequestMethod.GET)
 	public String myFolder(@RequestParam("id") Long folderId, Model theModel) {
 
-		Folder theFolder = folderService.findFolderById(folderId);
-		List<Step> thelistOfSteps = (List<Step>) theFolder.getService().getSteps();
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.findByUserName(auth.getName());
 
-		Step theStep = new Step();
-		for (int i = 0; i < thelistOfSteps.size(); i++) {
-			theStep = (Step) thelistOfSteps.get(i);
-			if (theStep.getNo() == theFolder.getStep_no())
-				break;
+		List<Role> roles = (List<Role>) user.getRoles();
+
+		if (roles.get(0).getName().equals("ROLE_NATURAL_PERSON")) {
+
+			Folder theFolder = folderService.findFolderById(folderId);
+			List<Step> thelistOfSteps = (List<Step>) theFolder.getService().getSteps();
+
+			Step theStep = new Step();
+			boolean stepOverFlowFlag = true;
+			for (int i = 0; i < thelistOfSteps.size(); i++) {
+				theStep = (Step) thelistOfSteps.get(i);
+				if (theStep.getNo() == theFolder.getStep_no())
+					stepOverFlowFlag = false;
+					break;
+			}
+
+			theModel.addAttribute("step", theStep);
+			theModel.addAttribute("folder", theFolder);
+			
+			if (stepOverFlowFlag) {
+				return "finished";
+			}
+			
+			if (theStep.getAction().equalsIgnoreCase("upload"))
+				return "upload";
+			else
+				return "sign";
+		} else {
+			
+			Folder theFolder = folderService.findFolderById(folderId);
+			theModel.addAttribute("folder", theFolder);
+			return "folder-administration";
 		}
-
-		theModel.addAttribute("step", theStep);
-		theModel.addAttribute("folder", theFolder);
-
-		if (theStep.getAction().equalsIgnoreCase("upload"))
-			return "upload";
-		else
-			return "sign";
 
 	}
 
@@ -245,5 +264,19 @@ public class DemoController {
 		return ResponseEntity.ok().headers(header).contentLength(file.length())
 				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
 	}
+	
+	@PostMapping(path = "/validate-step")
+	public String validateStep(@RequestParam("folderId") String id) {
+		
+		long folderId = Long.parseLong(id);
+		
+		Folder theFolder = folderService.findFolderById(folderId);
+		theFolder.setStep_no(theFolder.getStep_no() + 1);
+		System.out.print("MUIE : " + theFolder.getStep_no());
+		folderService.save(theFolder);
+		
+		return "home";
+	}
+	
 
 }

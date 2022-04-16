@@ -32,4 +32,13 @@ public class FolderDaoImpl implements FolderDao {
 		return theFolder;
 
 	}
+
+	@Override
+	public void save(Folder theFolder) {
+		// get current hibernate session
+		Session currentSession = entityManager.unwrap(Session.class);
+
+		currentSession.saveOrUpdate(theFolder);
+		
+	}
 }
