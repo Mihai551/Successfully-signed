@@ -42,4 +42,22 @@ public class DocumentDaoImpl implements DocumentDao {
 		currentSession.saveOrUpdate(theDocument);
 	}
 
+	@Override
+	public Document findById(Long theId) {
+
+		Session currentSession = entityManager.unwrap(Session.class);
+
+		Query<Document> theQuery = currentSession.createQuery("from Document where id=:theId", Document.class);
+		theQuery.setParameter("theId", theId);
+		Document theDocument = null;
+		try {
+			theDocument = theQuery.getSingleResult();
+		} catch (Exception e) {
+			theDocument = null;
+		}
+
+		return theDocument;
+
+	}
+
 }

@@ -8,4 +8,6 @@ public interface DocumentService {
 
 	Document findByFolderIdAndName(long folderId, String name);
 
+	Document findById(long folderId);
+
 }

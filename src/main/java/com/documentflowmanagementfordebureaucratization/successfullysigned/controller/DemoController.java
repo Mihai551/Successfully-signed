@@ -52,7 +52,7 @@ public class DemoController {
 
 	@Autowired
 	private FolderService folderService;
-	
+
 	@Autowired
 	private DocumentService documentService;
 
@@ -223,29 +223,24 @@ public class DemoController {
 			return "sign";
 
 	}
-	
+
 	@RequestMapping(path = "/download", method = RequestMethod.GET)
 	public ResponseEntity<ByteArrayResource> download(@RequestParam("id") long id) throws IOException {
 
-	    // ...
+		Path path = Paths.get("C:/Users/Mihai/Desktop/Successfully-Signed-Documents/" + id + ".pdf");
+		ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+		File file = new File("C:/Users/Mihai/Desktop/Successfully-Signed-Documents/" + id + ".pdf");
 		
 		
 		
-	    Path path = Paths.get("C:/Users/Mihai/Desktop/Successfully-Signed-Documents/" + id +".pdf");
-	    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-	    File file = new File("C:/Users/Mihai/Desktop/Successfully-Signed-Documents/" + id +".pdf");
-	    
-	    HttpHeaders header = new HttpHeaders();
-        header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=ce.pdf");
-        header.add("Cache-Control", "no-cache, no-store, must-revalidate");
-        header.add("Pragma", "no-cache");
-        header.add("Expires", "0");
+		HttpHeaders header = new HttpHeaders();
+		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+documentService.findById(id).getName()+".pdf");
+		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
+		header.add("Pragma", "no-cache");
+		header.add("Expires", "0");
 
-	    return ResponseEntity.ok()
-	            .headers(header)
-	            .contentLength(file.length())
-	            .contentType(MediaType.APPLICATION_OCTET_STREAM)
-	            .body(resource);
+		return ResponseEntity.ok().headers(header).contentLength(file.length())
+				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
 	}
 
 }

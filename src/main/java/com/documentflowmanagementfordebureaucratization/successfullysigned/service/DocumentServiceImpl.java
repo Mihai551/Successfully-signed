@@ -23,5 +23,11 @@ public class DocumentServiceImpl implements DocumentService {
 		// TODO Auto-generated method stub
 		return documentDao.findByFolderIdAndName(folderId, name);
 	}
+	
+	@Override
+	public Document findById(long folderId) {
+		// TODO Auto-generated method stub
+		return documentDao.findById(folderId);
+	}
 
 }

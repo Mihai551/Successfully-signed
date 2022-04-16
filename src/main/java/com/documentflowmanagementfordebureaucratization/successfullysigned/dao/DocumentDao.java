@@ -8,4 +8,6 @@ public interface DocumentDao {
 
 	Document findByFolderIdAndName(long folderId, String name);
 
+	Document findById(Long theId);
+
 }
