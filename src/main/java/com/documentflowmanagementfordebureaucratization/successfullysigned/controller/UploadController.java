@@ -44,13 +44,17 @@ public class UploadController {
 
 		// save the file on the local file system
 		try {
-			Document theDocument = new Document();
-			theDocument.setName(documentName);
-			theDocument.setFolder(folderService.findFolderById(folderId));
-			documentService.save(theDocument);
-			theDocument = documentService.findByFolderIdAndName(folderId, documentName);
-			Path path = Paths.get(UPLOAD_DIR + theDocument.getId() + ".pdf");
-			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+			if (documentService.findByFolderIdAndName(folderId, documentName) == null) {
+
+				Document theDocument = new Document();
+				theDocument.setName(documentName);
+				theDocument.setFolder(folderService.findFolderById(folderId));
+				documentService.save(theDocument);
+				theDocument = documentService.findByFolderIdAndName(folderId, documentName);
+				Path path = Paths.get(UPLOAD_DIR + theDocument.getId() + ".pdf");
+				Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

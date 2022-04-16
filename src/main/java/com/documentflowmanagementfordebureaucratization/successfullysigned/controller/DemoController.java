@@ -40,6 +40,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
+import java.lang.Object;
 
 @Controller
 public class DemoController {
@@ -115,6 +116,7 @@ public class DemoController {
 
 		Service service = serviceService.findServiceById(theCrmService.getId());
 		theCrmService.setName(service.getName());
+		theModel.addAttribute("theService", service);
 		theModel.addAttribute("crmService", theCrmService);
 		theModel.addAttribute("crmStep", new CrmStep());
 		theModel.addAttribute("theSteps", service.getSteps());
@@ -186,6 +188,7 @@ public class DemoController {
 
 	@GetMapping("/my-folders")
 	public String myFolders(Model theModel) {
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUserName(auth.getName());
 
@@ -199,6 +202,7 @@ public class DemoController {
 		theModel.addAttribute("folders", folders);
 
 		return "my-folders";
+
 	}
 
 	@RequestMapping(value = "my-folder", method = RequestMethod.GET)
@@ -230,11 +234,10 @@ public class DemoController {
 		Path path = Paths.get("C:/Users/Mihai/Desktop/Successfully-Signed-Documents/" + id + ".pdf");
 		ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
 		File file = new File("C:/Users/Mihai/Desktop/Successfully-Signed-Documents/" + id + ".pdf");
-		
-		
-		
+
 		HttpHeaders header = new HttpHeaders();
-		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+documentService.findById(id).getName()+".pdf");
+		header.add(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=" + documentService.findById(id).getName() + ".pdf");
 		header.add("Cache-Control", "no-cache, no-store, must-revalidate");
 		header.add("Pragma", "no-cache");
 		header.add("Expires", "0");
