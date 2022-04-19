@@ -14,11 +14,10 @@ public class ServiceServiceImpl implements ServiceService {
 	@Autowired
 	private ServiceDao serviceDao;
 
-
 	@Override
 	@Transactional
 	public Service findServiceById(Long id) {
-		System.out.print("ServiceService.findbyID:  " + serviceDao.findServicebyId(id).getId());
+
 		return serviceDao.findServicebyId(id);
 	}
 

@@ -30,6 +30,7 @@ import com.documentflowmanagementfordebureaucratization.successfullysigned.entit
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmStep;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.DocumentService;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.service.EmailService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.FolderService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.ServiceService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.UserService;
@@ -145,8 +146,6 @@ public class MainController {
 		Collection<Service> newService = new ArrayList<Service>();
 		newService.add(service);
 
-		// user.setServices(newService);
-
 		userService.saveService(user, newService);
 
 		User updatedUser = userService.findByUserName(auth.getName());
@@ -177,10 +176,24 @@ public class MainController {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUserName(auth.getName());
 
-		Folder folder = new Folder(1, user, serviceService.findServiceById(serviceId));
+		Service theService = serviceService.findServiceById(serviceId);
+
+		Folder folder = new Folder(1, user, theService);
 
 		user.setFolders(new ArrayList<Folder>(Arrays.asList(folder)));
 		userService.saveUser(user);
+
+		// Email sender
+
+		try {
+			EmailService emailService = new EmailService();
+			emailService.setTo(theService.getUser().getEmail());
+			emailService.setSubject("New folder");
+			emailService.setText(folder.getUser().getUserName() + " has instantiated " + theService.getName() + ".");
+			emailService.start();
+		} catch (Exception e) {
+			System.out.print(e);
+		}
 
 		return "home";
 
@@ -219,27 +232,29 @@ public class MainController {
 			List<Step> thelistOfSteps = (List<Step>) theFolder.getService().getSteps();
 
 			Step theStep = new Step();
+
 			boolean stepOverFlowFlag = true;
 			for (int i = 0; i < thelistOfSteps.size(); i++) {
 				theStep = (Step) thelistOfSteps.get(i);
-				if (theStep.getNo() == theFolder.getStep_no())
+				if (theStep.getNo() == theFolder.getStep_no()) {
 					stepOverFlowFlag = false;
 					break;
+				}
 			}
 
 			theModel.addAttribute("step", theStep);
 			theModel.addAttribute("folder", theFolder);
-			
-			if (stepOverFlowFlag) {
+
+			if (stepOverFlowFlag == true) {
 				return "finished";
 			}
-			
+
 			if (theStep.getAction().equalsIgnoreCase("upload"))
 				return "upload";
 			else
 				return "sign";
 		} else {
-			
+
 			Folder theFolder = folderService.findFolderById(folderId);
 			theModel.addAttribute("folder", theFolder);
 			return "folder-administration";
@@ -264,19 +279,29 @@ public class MainController {
 		return ResponseEntity.ok().headers(header).contentLength(file.length())
 				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
 	}
-	
+
 	@PostMapping(path = "/validate-step")
 	public String validateStep(@RequestParam("folderId") String id) {
-		
+
 		long folderId = Long.parseLong(id);
-		
+
 		Folder theFolder = folderService.findFolderById(folderId);
 		theFolder.setStep_no(theFolder.getStep_no() + 1);
-		System.out.print("MUIE : " + theFolder.getStep_no());
 		folderService.save(theFolder);
-		
+
+		try {
+			EmailService emailService = new EmailService();
+			emailService.setTo(theFolder.getUser().getEmail());
+			emailService.setSubject("Step Validation");
+			emailService.setText(
+					theFolder.getService().getUser().getUserName() + " has validated your last step. The actual step: <"
+							+ theFolder.getStep_no() + ">(" + theFolder.getService().getName() + ").");
+			emailService.start();
+		} catch (Exception e) {
+			System.out.print(e);
+		}
+
 		return "home";
 	}
-	
 
 }
