@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Upload</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+
+
+
+	<section class="my-5">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-8 mx-auto">
+					<h2>Sign File</h2>
+
+
+					<p th:text="${step.documentName}" />
+
+					<p th:text="${message}" th:if="${message ne null}"
+						class="alert alert-primary"></p>
+					<form method="post" th:action="@{/sign}"
+						enctype="multipart/form-data">
+						<div class="form-group">
+
+							<input type="hidden" th:value="${document.id}" name="documentId" />
+							<br><br>
+							password <br>
+							<input type="text" name="password" />
+							
+						</div>
+						<button type="submit" class="btn btn-primary">Sign File</button>
+					</form>
+
+					<div style="margin-bottom: 25px" class="input-group">
+						<span class="input-group-addon"><i class=""></i></span>
+
+						<div>
+							<th:block th:each="document: ${folder.documents}">
+								<a th:href="@{/download/(id=${document.id})}"> <br>[[${document.name}]]
+
+								</a>
+						</div>
+						<br />
+						</th:block>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<hr>
+
+	<a th:href="@{/}">Back to Home Page</a>
+
+	<br>
+	<br>
+
+	<form th:action="@{/logout}" method="POST">
+
+		<input type="submit" value="Logout" />
+
+	</form>
+
+</body>
+</html>

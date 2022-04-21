@@ -28,14 +28,17 @@ import org.springframework.web.servlet.View;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.*;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmService;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmSign;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmStep;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.DocumentService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.EmailService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.FolderService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.ServiceService;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.service.SignService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.UserService;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -57,6 +60,9 @@ public class MainController {
 
 	@Autowired
 	private DocumentService documentService;
+
+	@Autowired
+	private SignService signService;
 
 	@GetMapping("/")
 	public String showHome() {
@@ -251,8 +257,13 @@ public class MainController {
 
 			if (theStep.getAction().equalsIgnoreCase("upload"))
 				return "upload";
-			else
+			else {
+				Document theDocument = documentService.findByFolderIdAndName(theFolder.getId(),
+						theStep.getDocumentName());
+				theModel.addAttribute("crmSign", new CrmSign());
+				theModel.addAttribute("document", theDocument);
 				return "sign";
+			}
 		} else {
 
 			Folder theFolder = folderService.findFolderById(folderId);
@@ -300,6 +311,22 @@ public class MainController {
 		} catch (Exception e) {
 			System.out.print(e);
 		}
+
+		return "home";
+	}
+
+	@PostMapping(path = "/sign")
+	public String sign(@ModelAttribute("crmSign") CrmSign crmSign) throws FileNotFoundException, Exception {
+		
+        System.out.print("C:\\Users\\Mihai\\Desktop\\Successfully-Signed-Documents\\" + crmSign.getDocumentId() + ".pdf");
+		System.out.print("sign API:  " + "userName" + " " + crmSign.getDocumentId() + " " + crmSign.getPassword() + " ");
+
+		
+		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.print("sign API:  " + userName + " " + crmSign.getDocumentId() + " " + crmSign.getPassword() + " ");
+		signService.sign(userName, crmSign.getDocumentId(),
+				crmSign.getPassword());
+		
 
 		return "home";
 	}
