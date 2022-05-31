@@ -258,8 +258,12 @@ public class MainController {
 			if (theStep.getAction().equalsIgnoreCase("upload"))
 				return "upload";
 			else {
+				System.out.println(theFolder.getId() + " " + theStep.getDocumentName());
 				Document theDocument = documentService.findByFolderIdAndName(theFolder.getId(),
 						theStep.getDocumentName());
+
+				System.out.println(theFolder.getId() + " " + theStep.getDocumentName() + " " + theDocument.getId());
+
 				theModel.addAttribute("crmSign", new CrmSign());
 				theModel.addAttribute("document", theDocument);
 				return "sign";
@@ -267,7 +271,9 @@ public class MainController {
 		} else {
 
 			Folder theFolder = folderService.findFolderById(folderId);
+
 			theModel.addAttribute("folder", theFolder);
+			theModel.addAttribute("crmSign", new CrmSign());
 			return "folder-administration";
 		}
 
@@ -317,16 +323,18 @@ public class MainController {
 
 	@PostMapping(path = "/sign")
 	public String sign(@ModelAttribute("crmSign") CrmSign crmSign) throws FileNotFoundException, Exception {
-		
-        System.out.print("C:\\Users\\Mihai\\Desktop\\Successfully-Signed-Documents\\" + crmSign.getDocumentId() + ".pdf");
-		System.out.print("sign API:  " + "userName" + " " + crmSign.getDocumentId() + " " + crmSign.getPassword() + " ");
 
-		
+		System.out
+				.print("C:\\Users\\Mihai\\Desktop\\Successfully-Signed-Documents\\" + crmSign.getDocumentId() + ".pdf");
+		System.out
+				.print("sign API:  " + "userName" + " " + crmSign.getDocumentId() + " " + crmSign.getPassword() + " ");
+
 		String userName = SecurityContextHolder.getContext().getAuthentication().getName();
 		System.out.print("sign API:  " + userName + " " + crmSign.getDocumentId() + " " + crmSign.getPassword() + " ");
-		signService.sign(userName, crmSign.getDocumentId(),
-				crmSign.getPassword());
-		
+
+		if (crmSign.getDocumentId() != 0) {
+			signService.sign(userName, crmSign.getDocumentId(), crmSign.getPassword());
+		}
 
 		return "home";
 	}

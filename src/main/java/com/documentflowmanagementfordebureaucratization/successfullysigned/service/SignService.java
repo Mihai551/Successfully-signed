@@ -6,4 +6,6 @@ public interface SignService {
 
 	void sign(String userName, long documentId, String password) throws FileNotFoundException, Exception;
 
+	void signaturesValidation();
+
 }
