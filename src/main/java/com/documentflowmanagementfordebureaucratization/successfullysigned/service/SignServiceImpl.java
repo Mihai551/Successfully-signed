@@ -27,7 +27,6 @@ import com.aspose.pdf.Document;
 import com.aspose.pdf.PKCS7;
 import com.aspose.pdf.facades.PdfFileSignature;
 
-
 @Service
 public class SignServiceImpl implements SignService {
 
@@ -46,18 +45,37 @@ public class SignServiceImpl implements SignService {
 
 		try {
 			PKCS7 pkcs = new PKCS7("C:\\Program Files\\Java\\jdk-15.0.2\\bin\\" + userName + "_root_.p12", password); // Use
-						
-				signature.sign(1, true, new java.awt.Rectangle(300, 100, 400, 200), pkcs);
-				
-				signature.save(filePath);
-			
-		} catch (Exception e) { System.out.print(e);
+
+			signature.sign(1, true, new java.awt.Rectangle(300, 100, 400, 200), pkcs);
+
+			signature.save(filePath);
+
+		} catch (Exception e) {
+			System.out.print(e);
 		}
 	}
-	
-	
-	@Override
-	public void signaturesValidation() {};
 
+	@Override
+	public void signaturesValidation(long documentId) {
+		PdfFileSignature pdfSign = new PdfFileSignature();
+		String _dataDir = "C:\\Users\\Mihai\\Desktop\\Successfully-Signed-Documents\\";
+		pdfSign.bindPdf(_dataDir + documentId + ".pdf");
+		int index = 1;
+		
+		for (String i : pdfSign.getSignNames()) {
+
+			if (pdfSign.verifySignature("Signature" + index)) {
+				System.out.println(i + " signature is valid");
+
+				//validSignatures.add(i);
+
+			} else {
+				System.out.println(i + " signature is not valid");
+			}
+
+			index++;
+		}
+		pdfSign.close();
+	}
 
 }

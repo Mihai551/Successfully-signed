@@ -339,4 +339,12 @@ public class MainController {
 		return "home";
 	}
 
+	@PostMapping(path = "/signatures-validation")
+	public String signaturesValidation(@RequestParam("documentId") long id) {
+		
+		signService.signaturesValidation(id);
+		
+		return "home";
+	}
+
 }
