@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Upload</title>
+<title>Sign</title>
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 </head>
@@ -25,10 +25,9 @@
 						<div class="form-group">
 
 							<input type="hidden" th:value="${document.id}" name="documentId" />
-							<br><br>
-							password <br>
-							<input type="password" name="password" />
-							
+							<br> <br> password <br> <input type="password"
+								name="password" />
+
 						</div>
 						<button type="submit" class="btn btn-primary">Sign File</button>
 					</form>
@@ -45,7 +44,31 @@
 						<br />
 						</th:block>
 
+
 					</div>
+
+					<br> <br>
+
+					<h2>Check Signatures</h2>
+
+					<form method="post" th:action="@{/signatures-validation}"
+						enctype="multipart/form-data">
+						<div class="form-group">
+
+							<select class="form-control" th:field="*{crmSign.documentId}"
+								id="dropDownList">
+								<option value="0">select a document</option>
+								<option th:each="option : ${folder.documents}"
+									th:value="${option.id}" th:text="${option.name}"></option>
+							</select>
+
+
+						</div>
+						<button type="submit" class="btn btn-primary">Check
+							Signatures</button>
+					</form>
+
+
 				</div>
 			</div>
 		</div>

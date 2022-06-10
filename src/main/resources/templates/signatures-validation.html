@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Signatures Validation</title>
+<link rel="stylesheet"
+	href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+</head>
+<body>
+
+	<h2>Signatures</h2>
+
+	<br>
+
+	<p>Document: <span th:text="${document.name}"></span></p>
+
+	<div th:if="${ not#lists.isEmpty(signatures)}">
+		<table>
+
+			<tr>
+				<th>Signature</th>
+				<th>Signer Name</th>
+				<th>Validity</th>
+			</tr>
+			<tr th:each="signature : ${signatures}">
+				<td th:text="${signature.signature}"></td>
+				<td th:text="${signature.signer}"></td>
+				<td th:text="${signature.validity}"></td>
+			</tr>
+		</table>
+	</div>
+
+	<hr>
+
+	<a th:href="@{/}">Back to Home Page</a>
+
+	<br>
+	<br>
+
+	<form th:action="@{/logout}" method="POST">
+
+		<input type="submit" value="Logout" />
+
+	</form>
+</body>
