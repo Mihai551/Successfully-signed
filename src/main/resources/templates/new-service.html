@@ -37,10 +37,7 @@
 		<br>
 
 		<!-- Check for login error -->
-		<div th:if="${session.user}">
-			<p
-				th:text="'USERNAME' + ${session.user.userName} +'First name: ' + ${session.user.firstName} + ', Last name: ' + ${session.user.lastName} + ', Email: ' + ${session.user.email}"></p>
-		</div>
+		<div th:if="${session.user}"></div>
 	</div>
 
 

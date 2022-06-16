@@ -35,12 +35,15 @@
 						enctype="multipart/form-data">
 						<div class="form-group">
 
+							<input type="hidden" th:value="${folder.id}" name="folderId" />
+
 							<select class="form-control" th:field="*{crmSign.documentId}"
 								id="dropDownList">
 								<option value="0">select a document</option>
 								<option th:each="option : ${folder.documents}"
 									th:value="${option.id}" th:text="${option.name}"></option>
 							</select> password: <br> <input type="password" name="password" />
+
 
 						</div>
 						<button type="submit" class="btn btn-primary">Sign File</button>
@@ -63,7 +66,8 @@
 
 
 						</div>
-						<button type="submit" class="btn btn-primary">Check Signatures</button>
+						<button type="submit" class="btn btn-primary">Check
+							Signatures</button>
 					</form>
 
 					<div style="margin-bottom: 25px" class="input-group">

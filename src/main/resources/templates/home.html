@@ -17,9 +17,9 @@
 	<!-- display user name and role -->
 
 	<div>
-		User: <span sec:authentication="name"></span> <span
-			sec:authentication="name"></span> <br> <br> Role: <span
-			sec:authentication="principal.authorities"></span> <br> <br>
+		User: <span sec:authentication="name"></span> <br> <br>
+		Role: <span sec:authentication="principal.authorities"></span> <br>
+		<br>
 
 		<!-- Check for login error -->
 		<div th:if="${session.user}">
@@ -33,9 +33,8 @@
 
 		<p>
 			<a th:href="@{/new-folder}">New folder</a> (Only for natural people)
-			<br>
-			<br> <a th:href="@{/my-folders}">My folders</a> (Only for
-			natural people)
+			<br> <br> <a th:href="@{/my-folders}">My folders</a> (Only
+			for natural people)
 
 		</p>
 
@@ -47,9 +46,8 @@
 
 		<p>
 			<a th:href="@{/new-service}">New Service</a> (Only for juridical
-			entities) <br>
-			<br> <a th:href="@{/my-services}">My Services</a> (Only for
-			juridical entities)
+			entities) <br> <br> <a th:href="@{/my-services}">My
+				Services</a> (Only for juridical entities)
 		</p>
 
 	</div>
