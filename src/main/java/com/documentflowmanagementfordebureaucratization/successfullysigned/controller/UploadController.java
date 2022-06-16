@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,16 +42,18 @@ public class UploadController {
 
 	@PostMapping("/upload")
 	public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("folderId") long folderId,
-			@RequestParam("documentName") String documentName, RedirectAttributes attributes) {
+			@RequestParam("documentName") String documentName, RedirectAttributes redirectAttributes) {
 
 		// check if file is empty
 		if (file.isEmpty()) {
-			attributes.addFlashAttribute("message", "Please select a file to upload.");
+			redirectAttributes.addAttribute("id", folderId);
 			return "redirect:/my-folder";
 		}
 
-		// normalize the file path
-		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		if (documentName.isBlank()) {
+			redirectAttributes.addAttribute("id", folderId);
+			return "redirect:/my-folder";
+		}
 
 		// save the file on the local file system
 		try {
@@ -108,9 +109,10 @@ public class UploadController {
 		}
 
 		// return success response
-		attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
 
-		return "redirect:/";
+		redirectAttributes.addAttribute("id", folderId);
+
+		return "redirect:/my-folder";
 	}
 
 }

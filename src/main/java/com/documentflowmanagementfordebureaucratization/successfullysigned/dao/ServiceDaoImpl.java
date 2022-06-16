@@ -23,7 +23,7 @@ public class ServiceDaoImpl implements ServiceDao {
 		// get the current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
 
-		// now retrieve/read from database using username
+		//retrieve/read from database using username
 		Query<Service> theQuery = currentSession.createQuery("from Service where id=:theId", Service.class);
 		theQuery.setParameter("theId", theId);
 		Service theService = null;

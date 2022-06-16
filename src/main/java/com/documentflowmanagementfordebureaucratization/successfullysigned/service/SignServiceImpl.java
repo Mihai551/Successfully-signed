@@ -14,7 +14,9 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import com.aspose.pdf.Document;
 import com.aspose.pdf.PKCS7;
 import com.aspose.pdf.facades.PdfFileSignature;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.model.SignaturesValidation;
 
 @Service
 public class SignServiceImpl implements SignService {
@@ -56,26 +59,30 @@ public class SignServiceImpl implements SignService {
 	}
 
 	@Override
-	public void signaturesValidation(long documentId) {
+	public List<SignaturesValidation> signaturesValidation(long documentId) {
 		PdfFileSignature pdfSign = new PdfFileSignature();
 		String _dataDir = "C:\\Users\\Mihai\\Desktop\\Successfully-Signed-Documents\\";
 		pdfSign.bindPdf(_dataDir + documentId + ".pdf");
-		int index = 1;
-		
+
+		List<SignaturesValidation> signaturesValidation = new ArrayList<SignaturesValidation>();
+
 		for (String i : pdfSign.getSignNames()) {
 
-			if (pdfSign.verifySignature("Signature" + index)) {
-				System.out.println(i + " signature is valid");
-
-				//validSignatures.add(i);
+			if (pdfSign.verifySignature(i)) {
+				SignaturesValidation signatureValidation = new SignaturesValidation(i, pdfSign.getSignerName(i),
+						"Valid");
+				signaturesValidation.add(signatureValidation);
 
 			} else {
-				System.out.println(i + " signature is not valid");
+				SignaturesValidation signatureValidation = new SignaturesValidation(i, pdfSign.getSignerName(i),
+						"Invalid");
+				signaturesValidation.add(signatureValidation);
 			}
 
-			index++;
 		}
 		pdfSign.close();
+		
+		return signaturesValidation;
 	}
 
 }

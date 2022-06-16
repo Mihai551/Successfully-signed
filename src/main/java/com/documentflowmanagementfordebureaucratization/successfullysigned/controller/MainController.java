@@ -25,11 +25,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.entity.*;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmSign;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.CrmStep;
+import com.documentflowmanagementfordebureaucratization.successfullysigned.model.SignaturesValidation;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.DocumentService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.EmailService;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.FolderService;
@@ -110,12 +112,6 @@ public class MainController {
 			@ModelAttribute("serviceId") String theServiceId, BindingResult theBindingResult, Model theModel,
 			HttpSession session) {
 
-		/*
-		 * Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		 * User updatedUser = userService.findByUserName(auth.getName());
-		 * session.setAttribute("user", updatedUser);
-		 */
-
 		if (theServiceId == null || theServiceId.isEmpty()) {
 		} else {
 			theCrmService.setId(Long.parseLong(theServiceId));
@@ -140,6 +136,19 @@ public class MainController {
 		User user = userService.findByUserName(auth.getName());
 
 		Service service = serviceService.findServiceById(theCrmStep.getServiceId());
+
+		if (theCrmStep.getDocumentName().isBlank()) {
+
+			CrmService theCrmService = new CrmService();
+			theCrmService.setId(theCrmStep.getServiceId());
+
+			model.addAttribute("serviceId", theCrmService.getId().toString());
+
+			request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+
+			return new ModelAndView("redirect:/add-step", model);
+
+		}
 
 		Step step = new Step(theCrmStep.getAction(), theCrmStep.getDocumentName());
 		step.setNo(service.getSteps().size() + 1);
@@ -177,7 +186,7 @@ public class MainController {
 	}
 
 	@RequestMapping(value = "process-new-folder", method = RequestMethod.GET)
-	public String processNewFolder(@RequestParam("id") Long serviceId) {
+	public ModelAndView processNewFolder(@RequestParam("id") Long serviceId, HttpServletRequest request) {
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUserName(auth.getName());
@@ -201,7 +210,9 @@ public class MainController {
 			System.out.print(e);
 		}
 
-		return "home";
+		request.setAttribute(View.RESPONSE_STATUS_ATTRIBUTE, HttpStatus.TEMPORARY_REDIRECT);
+
+		return new ModelAndView("redirect:/my-folders");
 
 	}
 
@@ -226,6 +237,8 @@ public class MainController {
 
 	@RequestMapping(value = "my-folder", method = RequestMethod.GET)
 	public String myFolder(@RequestParam("id") Long folderId, Model theModel) {
+
+		// Long folderId = Long.parseLong(id);
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUserName(auth.getName());
@@ -252,12 +265,14 @@ public class MainController {
 			theModel.addAttribute("folder", theFolder);
 
 			if (stepOverFlowFlag == true) {
+				theModel.addAttribute("crmSign", new CrmSign());
 				return "finished";
 			}
 
-			if (theStep.getAction().equalsIgnoreCase("upload"))
+			if (theStep.getAction().equalsIgnoreCase("upload")) {
+				theModel.addAttribute("crmSign", new CrmSign());
 				return "upload";
-			else {
+			} else {
 				System.out.println(theFolder.getId() + " " + theStep.getDocumentName());
 				Document theDocument = documentService.findByFolderIdAndName(theFolder.getId(),
 						theStep.getDocumentName());
@@ -298,7 +313,7 @@ public class MainController {
 	}
 
 	@PostMapping(path = "/validate-step")
-	public String validateStep(@RequestParam("folderId") String id) {
+	public String validateStep(@RequestParam("folderId") String id, RedirectAttributes redirectAttributes) {
 
 		long folderId = Long.parseLong(id);
 
@@ -318,11 +333,17 @@ public class MainController {
 			System.out.print(e);
 		}
 
-		return "home";
+		redirectAttributes.addAttribute("id", id);
+
+		return "redirect:/my-folder";
 	}
 
 	@PostMapping(path = "/sign")
-	public String sign(@ModelAttribute("crmSign") CrmSign crmSign) throws FileNotFoundException, Exception {
+	public String sign(@ModelAttribute("crmSign") CrmSign crmSign, RedirectAttributes redirectAttributes)
+			throws FileNotFoundException, Exception {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		User user = userService.findByUserName(auth.getName());
 
 		System.out
 				.print("C:\\Users\\Mihai\\Desktop\\Successfully-Signed-Documents\\" + crmSign.getDocumentId() + ".pdf");
@@ -334,17 +355,48 @@ public class MainController {
 
 		if (crmSign.getDocumentId() != 0) {
 			signService.sign(userName, crmSign.getDocumentId(), crmSign.getPassword());
+
+			try {
+				List<Role> roles = (List<Role>) user.getRoles();
+
+				Folder theFolder = folderService.findFolderById(crmSign.getFolderId());
+				Document theDocument = documentService.findById(crmSign.getDocumentId());
+
+				if (roles.get(0).getName().equals("ROLE_NATURAL_PERSON")) {
+					EmailService emailService = new EmailService();
+					emailService.setTo(theFolder.getService().getUser().getEmail());
+					emailService.setSubject("Document signed.");
+					emailService.setText(theFolder.getUser().getUserName() + " signed " + theDocument.getName()
+							+ " from " + theFolder.getService().getName() + ".");
+					emailService.start();
+				} else {
+
+					EmailService emailService = new EmailService();
+					emailService.setTo(theFolder.getUser().getEmail());
+					emailService.setSubject("Document signed.");
+					emailService.setText(theFolder.getService().getUser().getUserName() + " signed "
+							+ theDocument.getName() + " from " + theFolder.getService().getName() + ".");
+					emailService.start();
+
+				}
+			} catch (Exception e) {
+				System.out.print(e);
+			}
 		}
 
-		return "home";
+		redirectAttributes.addAttribute("id", crmSign.getFolderId());
+
+		return "redirect:/my-folder";
 	}
 
 	@PostMapping(path = "/signatures-validation")
-	public String signaturesValidation(@RequestParam("documentId") long id) {
-		
-		signService.signaturesValidation(id);
-		
-		return "home";
+	public String signaturesValidation(@RequestParam("documentId") long id, Model theModel) {
+		Document theDocument = documentService.findById(id);
+		List<SignaturesValidation> signatures = signService.signaturesValidation(id);
+		theModel.addAttribute("signatures", signatures);
+		theModel.addAttribute("document", theDocument);
+
+		return "signatures-validation";
 	}
 
 }

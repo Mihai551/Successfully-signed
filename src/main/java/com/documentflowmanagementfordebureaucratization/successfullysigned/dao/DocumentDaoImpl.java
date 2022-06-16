@@ -38,7 +38,7 @@ public class DocumentDaoImpl implements DocumentDao {
 		// get current hibernate session
 		Session currentSession = entityManager.unwrap(Session.class);
 
-		// create the user ... finally LOL
+		
 		currentSession.saveOrUpdate(theDocument);
 	}
 

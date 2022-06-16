@@ -17,6 +17,10 @@ public class CrmSign {
 	@Setter
 	@Getter
 	private Long documentId;
+	
+	@Setter
+	@Getter
+	private Long folderId;
 
 	public CrmSign() {
 		super();

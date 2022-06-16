@@ -34,8 +34,9 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests().antMatchers("/").authenticated().antMatchers("/leaders/**").hasRole("NATURAL_PERSON")
-				.antMatchers("/systems/**").hasRole("JURIDICAL_ENTITY").antMatchers("/my-services/**")
+		http.authorizeRequests().antMatchers("/").authenticated().antMatchers("/new-folder/**")
+				.hasRole("NATURAL_PERSON").antMatchers("/my-folders/**").hasRole("NATURAL_PERSON")
+				.antMatchers("/new-service/**").hasRole("JURIDICAL_ENTITY").antMatchers("/my-services/**")
 				.hasRole("JURIDICAL_ENTITY").and().formLogin().loginPage("/showMyLoginPage")
 				.loginProcessingUrl("/authenticateTheUser").successHandler(customAuthenticationSuccessHandler)
 				.permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/access-denied");
@@ -53,7 +54,7 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-		auth.setUserDetailsService(userService); // set the custom user details service
+		auth.setUserDetailsService(userService); 
 		auth.setPasswordEncoder(passwordEncoder()); // set the password encoder - bcrypt
 		return auth;
 	}
