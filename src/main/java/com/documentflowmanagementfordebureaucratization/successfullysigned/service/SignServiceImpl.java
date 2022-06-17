@@ -47,7 +47,7 @@ public class SignServiceImpl implements SignService {
 		PdfFileSignature signature = new PdfFileSignature(document);
 
 		try {
-			PKCS7 pkcs = new PKCS7("C:\\Program Files\\Java\\jdk-15.0.2\\bin\\" + userName + "_root_.p12", password); // Use
+			PKCS7 pkcs = new PKCS7("C:\\Program Files\\Java\\jdk-15.0.2\\bin\\" + userName + ".p12", password); // Use
 
 			signature.sign(1, true, new java.awt.Rectangle(300, 100, 400, 200), pkcs);
 

@@ -10,11 +10,11 @@ public class Email {
 
 	public static JavaMailSender getJavaMailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.gmail.com");
-		mailSender.setPort(587);
+		mailSender.setHost("smtp.office365.com"); //smtp.gmail.com
+		mailSender.setPort(587); //587
 
-		mailSender.setUsername("Successfully.Signed.licenta@gmail.com");
-		mailSender.setPassword("licentaETTI2022");
+		mailSender.setUsername("Successfully.Signed.licenta@gmail.com"); //Successfully.Signed.licenta@gmail.com
+		mailSender.setPassword("licentaETTI2022"); //licentaETTI2022
 
 		Properties props = mailSender.getJavaMailProperties();
 		props.put("mail.transport.protocol", "smtp");

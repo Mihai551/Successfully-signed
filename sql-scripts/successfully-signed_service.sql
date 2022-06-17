@@ -29,7 +29,7 @@ CREATE TABLE `service` (
   PRIMARY KEY (`id`),
   KEY `users_services_idx` (`user_id`),
   CONSTRAINT `users_services` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `service` (
 
 LOCK TABLES `service` WRITE;
 /*!40000 ALTER TABLE `service` DISABLE KEYS */;
-INSERT INTO `service` VALUES (46,'service1',20),(47,'service3',22),(48,'u4s1',23),(49,'service2',20);
+INSERT INTO `service` VALUES (46,'service1',20),(47,'service3',22),(48,'u4s1',23),(49,'service2',20),(50,'mircea',24),(51,'constructii',20),(52,'testStepValidation',20),(53,'emailServiceTest',25),(54,'1',25),(55,'serviciuNou',25),(56,'signTest1',25),(57,'serviceX',25),(58,'serviceX2',29),(59,'dbTest',25),(60,'service1',30),(61,'service2',30);
 /*!40000 ALTER TABLE `service` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-04-10  0:10:47
+-- Dump completed on 2022-06-17 21:31:04
