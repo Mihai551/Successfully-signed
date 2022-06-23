@@ -30,6 +30,7 @@ import com.aspose.pdf.PKCS7;
 import com.aspose.pdf.facades.PdfFileSignature;
 import com.documentflowmanagementfordebureaucratization.successfullysigned.model.SignaturesValidation;
 
+@SuppressWarnings("unused")
 @Service
 public class SignServiceImpl implements SignService {
 
@@ -44,6 +45,7 @@ public class SignServiceImpl implements SignService {
 		String filePath = _dataDir + documentId + ".pdf";
 		Document document = new Document(filePath);
 
+		@SuppressWarnings("resource")
 		PdfFileSignature signature = new PdfFileSignature(document);
 
 		try {

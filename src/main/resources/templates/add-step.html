@@ -147,7 +147,7 @@
 
 						<th:block th:each="folder: ${theService.folders}">
 							<a th:href="@{/my-folder/(id=${folder.id})}">
-								[[${folder.user.email}]] ([[${folder.step_no}]])</a>
+								[[${folder.user.userName}]] ([[${folder.step_no}]])</a>
 							<br />
 						</th:block>
 

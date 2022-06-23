@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
-	// need to inject user dao
 	@Autowired
 	private UserDao userDao;
 

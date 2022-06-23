@@ -12,14 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.documentflowmanagementfordebureaucratization.successfullysigned.service.UserService;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Configuration
 @EnableWebSecurity
-public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	// add a reference to our user service
 	@Autowired
 	private UserService userService;
 
@@ -37,7 +33,7 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/").authenticated().antMatchers("/new-folder/**")
 				.hasRole("NATURAL_PERSON").antMatchers("/my-folders/**").hasRole("NATURAL_PERSON")
 				.antMatchers("/new-service/**").hasRole("JURIDICAL_ENTITY").antMatchers("/my-services/**")
-				.hasRole("JURIDICAL_ENTITY").and().formLogin().loginPage("/showMyLoginPage")
+				.hasRole("JURIDICAL_ENTITY").and().formLogin().loginPage("/login")
 				.loginProcessingUrl("/authenticateTheUser").successHandler(customAuthenticationSuccessHandler)
 				.permitAll().and().logout().permitAll().and().exceptionHandling().accessDeniedPage("/access-denied");
 
@@ -55,7 +51,7 @@ public class DemoSecurityConfig extends WebSecurityConfigurerAdapter {
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
 		auth.setUserDetailsService(userService); 
-		auth.setPasswordEncoder(passwordEncoder()); // set the password encoder - bcrypt
+		auth.setPasswordEncoder(passwordEncoder()); 
 		return auth;
 	}
 

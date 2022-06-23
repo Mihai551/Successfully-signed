@@ -9,8 +9,6 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
-import com.documentflowmanagementfordebureaucratization.successfullysigned.validation.FieldMatchValidator;
-
 @Constraint(validatedBy = FieldMatchValidator.class)
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
