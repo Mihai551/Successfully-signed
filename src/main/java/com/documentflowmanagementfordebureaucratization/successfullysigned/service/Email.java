@@ -10,7 +10,7 @@ public class Email {
 
 	public static JavaMailSender getJavaMailSender() {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-		mailSender.setHost("smtp.office365.com"); //smtp.gmail.com
+		mailSender.setHost("//smtp.gmail.com"); //smtp.gmail.com
 		mailSender.setPort(587); //587
 
 		mailSender.setUsername("Successfully.Signed.licenta@gmail.com"); //Successfully.Signed.licenta@gmail.com

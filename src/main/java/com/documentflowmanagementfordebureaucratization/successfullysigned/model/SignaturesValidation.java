@@ -15,7 +15,7 @@ public class SignaturesValidation {
 	
 	@Setter
 	@Getter
-	private String validity;
+	private String validity; 
 	
 	public SignaturesValidation(String signature, String signer, String validity) {
 		super();

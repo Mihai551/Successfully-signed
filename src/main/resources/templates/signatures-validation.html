@@ -18,12 +18,12 @@
 
 			<tr>
 				<th>Signature</th>
-				<th>Signer Name</th>
+				
 				<th>Validity</th>
 			</tr>
 			<tr th:each="signature : ${signatures}">
 				<td th:text="${signature.signature}"></td>
-				<td th:text="${signature.signer}"></td>
+				
 				<td th:text="${signature.validity}"></td>
 			</tr>
 		</table>

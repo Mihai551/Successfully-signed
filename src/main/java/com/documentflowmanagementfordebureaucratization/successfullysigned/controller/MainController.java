@@ -236,8 +236,6 @@ public class MainController {
 	@RequestMapping(value = "my-folder", method = RequestMethod.GET)
 	public String myFolder(@RequestParam("id") Long folderId, Model theModel) {
 
-		// Long folderId = Long.parseLong(id);
-
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		User user = userService.findByUserName(auth.getName());
 

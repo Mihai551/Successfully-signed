@@ -44,7 +44,6 @@ public class UploadController {
 	public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("folderId") long folderId,
 			@RequestParam("documentName") String documentName, RedirectAttributes redirectAttributes) {
 
-		// check if file is empty
 		if (file.isEmpty()) {
 			redirectAttributes.addAttribute("id", folderId);
 			return "redirect:/my-folder";
@@ -55,7 +54,7 @@ public class UploadController {
 			return "redirect:/my-folder";
 		}
 
-		// save the file on the local file system
+		
 		try {
 
 			if (documentService.findByFolderIdAndName(folderId, documentName) == null) {
